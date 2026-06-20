@@ -1,0 +1,76 @@
+import java.util.Scanner;
+
+public class WordsWithLengths2D {
+    public static int findStringLength(String text) {
+        int count = 0;
+        try {
+            while (true) {
+                text.charAt(count);
+                count++;
+            }
+        } catch (StringIndexOutOfBoundsException e) {
+            return count;
+        }
+    }
+    
+    public static String[] splitIntoWords(String text) {
+        int length = findStringLength(text);
+        int wordCount = 0;
+        int[] spaceIndexes = new int[length];
+        
+        spaceIndexes[0] = -1;
+        wordCount = 1;
+        
+        for (int i = 0; i < length; i++) {
+            if (text.charAt(i) == ' ') {
+                spaceIndexes[wordCount] = i;
+                wordCount++;
+            }
+        }
+        spaceIndexes[wordCount] = length;
+        
+        String[] words = new String[wordCount];
+        for (int i = 0; i < wordCount; i++) {
+            int startIndex = spaceIndexes[i] + 1;
+            int endIndex = spaceIndexes[i + 1];
+            StringBuilder word = new StringBuilder();
+            
+            for (int j = startIndex; j < endIndex; j++) {
+                word.append(text.charAt(j));
+            }
+            words[i] = word.toString();
+        }
+        
+        return words;
+    }
+    
+    public static String[][] getWordsWithLengths(String[] words) {
+        String[][] result = new String[words.length][2];
+        
+        for (int i = 0; i < words.length; i++) {
+            result[i][0] = words[i];
+            result[i][1] = String.valueOf(findStringLength(words[i]));
+        }
+        
+        return result;
+    }
+    
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.print("Enter text: ");
+        String text = scanner.nextLine();
+        
+        String[] words = splitIntoWords(text);
+        String[][] wordsWithLengths = getWordsWithLengths(words);
+        
+        System.out.println("\n===== Words with Lengths =====");
+        System.out.println("Word\t\tLength");
+        for (int i = 0; i < wordsWithLengths.length; i++) {
+            int length = Integer.parseInt(wordsWithLengths[i][1]);
+            System.out.println(wordsWithLengths[i][0] + "\t\t" + length);
+        }
+        
+        scanner.close();
+    }
+}
